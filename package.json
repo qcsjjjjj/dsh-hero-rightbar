@@ -1,0 +1,36 @@
+{
+  "name": "dsh-hero-rightbar",
+  "version": "0.1.0",
+  "description": "Adds the right Sidebar's missing way in on a page with no conversation: the same expand control, drawn where the session header cannot draw it.",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": { "default": "./lib/index.js" },
+    "./client": "./client/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "client", "cordis.patch.yml", "README.md"],
+  "keywords": ["dsh", "dsh-plugin", "deepseek-harness", "sidebar", "web-ui"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qcsjjjjj/dsh-hero-rightbar.git"
+  },
+  "homepage": "https://github.com/qcsjjjjj/dsh-hero-rightbar#readme",
+  "bugs": { "url": "https://github.com/qcsjjjjj/dsh-hero-rightbar/issues" },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-ui-workspace",
+        "@deepseek-ai/dsh-client-ui-sidebar-right"
+      ]
+    }
+  },
+  "peerDependencies": { "@deepseek-ai/cordis": "^4.0.2 || >=4.0.3-rc.1 <5.0.0-0" }
+}

@@ -1,0 +1,53 @@
+
+.dsh-hero-rightbar-trigger {
+	position: fixed;
+	top: 11px;
+	right: 12px;
+	width: 28px;
+	height: 28px;
+	padding: 6px;
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	color: var(--dsw-alias-label-secondary);
+	background: 0 0;
+	border: none;
+	border-radius: 28px;
+	cursor: pointer;
+	pointer-events: auto;
+	z-index: 1;
+}
+.dsh-hero-rightbar-trigger:hover { background: var(--dsw-alias-interactive-bg-hover); }
+.dsh-hero-rightbar-trigger[data-busy="true"] { opacity: .6; cursor: default; }
+.dsh-hero-rightbar-trigger svg { width: 15px; height: 15px; }
+.dsh-hero-rightbar-icon { transform: scaleX(-1); }
+.dsh-hero-rightbar-hint {
+	position: fixed;
+	top: 44px;
+	right: 12px;
+	max-width: 320px;
+	padding: 8px 10px;
+	color: var(--dsw-alias-label-primary);
+	background: var(--dsw-alias-bg-elevated, var(--dsw-alias-bg-base));
+	border: .5px solid var(--dsw-alias-border-l4);
+	border-radius: 10px;
+	box-shadow: 0 6px 20px rgb(0 0 0 / 24%);
+	font-size: 12px;
+	line-height: 18px;
+	pointer-events: auto;
+	z-index: 2;
+}
+/* The product's own control wins whenever it is on the page. This is the whole
+   arbitration: the browser re-evaluates :has() on every DOM change, so the
+   trigger can neither double up with the shipped button nor go stale while a
+   Session switch commits — and nothing has to read the DOM mid-render.
+   The selectors are spelled out rather than interpolated so that this text is
+   literally the stylesheet the browser receives (verify/extract-css.mjs slices
+   it out and a browser asserts on it).
+   Fullscreen covers the viewport with the product's own panel, so the way-in is
+   not drawn there either (the overlay sits below that panel). */
+body:has([data-sidebar-right-expand]) .dsh-hero-rightbar-trigger,
+body:has([data-sidebar-right-expand]) .dsh-hero-rightbar-hint,
+body:has([data-rightbar-fullscreen]) .dsh-hero-rightbar-trigger,
+body:has([data-rightbar-fullscreen]) .dsh-hero-rightbar-hint { display: none; }

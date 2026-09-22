@@ -1,0 +1,89 @@
+<!doctype html>
+<!--
+  dsh-hero-rightbar — arbitration fixture.
+
+  A faithful, script-free copy of the DOM the plugin actually lives in: the
+  frame root that carries `data-rightbar-collapsed` / `data-rightbar-fullscreen`,
+  the conversation header with its corner seat (empty while the Session is
+  blank), the `shell.overlay` layer holding the plugin's own trigger, and the
+  shipped ExpandButton once the header CAN draw it.
+
+  `plugin.css` is extracted verbatim from client/client.js by extract-css.mjs, so
+  the assertions in run.mjs judge the stylesheet that ships.
+
+  `#oldTrigger` models the implementation this revision replaced: it asks
+  `document.querySelector` once per "render" and never re-evaluates, which is
+  what made the button stay missing after a Session switch.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>dsh-hero-rightbar arbitration</title>
+<link rel="stylesheet" href="plugin.css">
+<style>
+  html, body { margin: 0; height: 100%; background: #1b1b1c; font: 12px sans-serif; color: #ddd; }
+  .frame { position: relative; height: 100%; }
+  .center { position: absolute; inset: 0; }
+  .header { position: relative; height: 48px; padding: 10px 28px 0 20px; box-sizing: border-box; }
+  .headerCorner { position: absolute; top: 10px; right: 12px; display: flex; }
+  .headerCorner button { width: 28px; height: 28px; }
+  .overlay { position: absolute; inset: 0; pointer-events: none; }
+  .overlay > * { pointer-events: auto; }
+  #oldTrigger { position: fixed; top: 11px; right: 48px; width: 28px; height: 28px; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame" data-rightbar-collapsed>
+  <div class="center" id="center">
+    <!-- ConversationSessionHeader: the header element always exists; the corner
+         seat inside it exists only when hideChrome is false. -->
+    <header class="header" id="header" aria-hidden="true"></header>
+  </div>
+  <div class="overlay" id="overlay">
+    <button type="button" class="dsh-hero-rightbar-trigger" id="trigger"
+            data-hero-rightbar-trigger aria-label="open"><svg width="15" height="15"></svg></button>
+    <div class="dsh-hero-rightbar-hint" id="hint" role="status">working</div>
+  </div>
+  <button type="button" id="oldTrigger" title="model of the removed implementation">old</button>
+</div>
+<script>
+  const frame = document.getElementById("frame");
+  const header = document.getElementById("header");
+  const oldTrigger = document.getElementById("oldTrigger");
+
+  /** The markup the shipped ExpandButton emits, inside its corner seat. */
+  function drawShippedExpandButton() {
+    const corner = document.createElement("div");
+    corner.className = "headerCorner";
+    corner.setAttribute("data-conversation-header-corner", "");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.setAttribute("data-sidebar-right-expand", "true");
+    button.setAttribute("aria-label", "expand");
+    corner.appendChild(button);
+    header.appendChild(corner);
+    header.removeAttribute("aria-hidden");
+    return button;
+  }
+
+  function removeShippedChrome() {
+    const corner = header.querySelector("[data-conversation-header-corner]");
+    if (corner !== null) corner.remove();
+    header.setAttribute("aria-hidden", "true");
+  }
+
+  /**
+   * Model of the removed implementation's decision: evaluated once per render,
+   * never re-evaluated by later DOM changes.
+   */
+  function oldRenderDecision() {
+    oldTrigger.hidden = document.querySelector("[data-sidebar-right-expand]") !== null;
+  }
+
+  window.fixture = {
+    frame, oldTrigger, drawShippedExpandButton, removeShippedChrome, oldRenderDecision,
+    shippedButton: () => document.querySelector("[data-sidebar-right-expand]")
+  };
+</script>
+</body>
+</html>

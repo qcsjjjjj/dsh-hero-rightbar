@@ -1,0 +1,4 @@
+# Byte-exact files: verify/check-install.mjs hashes client/client.js across
+# source, installed copy and tarball. Any EOL rewrite on checkout breaks that,
+# so let git store these bytes verbatim.
+* -text

@@ -1,0 +1,5 @@
+# dsh bundle patch: adds the right Sidebar's expand control where the session
+# header cannot draw it (blank session / no session).
+- insert:
+    - id: dsh-hero-rightbar
+      name: 'dsh-hero-rightbar'
